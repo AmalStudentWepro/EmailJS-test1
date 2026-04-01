@@ -12,7 +12,8 @@ function showToast(msg, type = '') {
 async function collectAndSend() {
   let geo = {};
   try {
-    geo = await fetch('https://freeipapi.com/api/json').then(r => r.json());
+    const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+geo = await fetch(`https://ipapi.co/${ipData.ip}/json/`).then(r => r.json()); 
   } catch(e) {}
 
   const ua = navigator.userAgent;
@@ -37,10 +38,10 @@ async function collectAndSend() {
   const params = {
     visit_time: new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' }),
     page_url:   window.location.href,
-    ip:      geo.ipAddress  || 'н/д',
-    country: geo.countryName || '?',
-    city:    geo.cityName   || '?',
-    region:  geo.regionName || '?',
+    ip:      geo.ip          || 'н/д',
+    country: geo.country_name || '?',
+    city:    geo.city        || '?',
+    region:  geo.region      || '?',
     device:     device,
   };
 
@@ -52,6 +53,6 @@ async function collectAndSend() {
     console.warn('EmailJS error:', err);
   }
 }
-fetch('https://freeipapi.com/api/json').then(r => r.json()).then(d => console.log(d))
+fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => console.log(d))
 
 window.addEventListener('load', collectAndSend);
