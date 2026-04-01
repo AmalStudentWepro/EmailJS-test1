@@ -13,7 +13,10 @@ async function collectAndSend() {
   let geo = {};
   try {
     const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
-    geo = await fetch(`http://ip-api.com/json/${ipData.ip}?lang=ru`).then(r => r.json());
+    geo.ip = ipData.ip;
+    // geo.country = '?';
+    // geo.city = '?';
+    // geo.region = '?';
   } catch(e) {}
 
   const ua = navigator.userAgent;
@@ -38,10 +41,10 @@ async function collectAndSend() {
   const params = {
     visit_time: new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' }),
     page_url:   window.location.href,
-    ip:      ipData.ip      || 'н/д',
-    country: geo.country    || '?',
-    city:    geo.city       || '?',
-    region:  geo.regionName || '?',
+    ip:      geo.ip      || 'н/д',
+    // country: geo.country || '?',
+    // city:    geo.city    || '?',
+    // region:  geo.region  || '?',
     device:     device,
   };
 
