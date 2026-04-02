@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dev — Онлайн</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="dev.css">
+</head>
+<body>
+
+<div class="blob"></div>
+
+<div class="wrapper">
+  <div class="tag">dev панель</div>
+
+  <div class="circle-wrap">
+    <svg class="circle-svg" viewBox="0 0 220 220">
+      <circle class="circle-bg" cx="110" cy="110" r="100"/>
+      <circle class="circle-fill" id="circleFill" cx="110" cy="110" r="100"/>
+    </svg>
+    <div class="circle-inner">
+      <div class="live-dot"></div>
+      <div class="circle-number" id="onlineCount">—</div>
+      <div class="circle-label">онлайн</div>
+    </div>
+  </div>
+
+  <div class="subtitle">
+    Максимум: <span>100 человек</span><br>
+    Обновляется каждые 10 сек
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val" id="statMax">—</div>
+      <div class="stat-key">макс сегодня</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="statTotal">—</div>
+      <div class="stat-key">всего визитов</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="statTime">—</div>
+      <div class="stat-key">обновлено</div>
+    </div>
+  </div>
+
+  <a href="/index.html" class="back-link">← на главную</a>
+</div>
+
+<script type="module" src="./dev.js"></script>
+</body>
+</html>
