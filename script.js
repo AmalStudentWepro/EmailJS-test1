@@ -1,113 +1,81 @@
-window.addEventListener("load", async () => {
-  if (sessionStorage.getItem("visit")) return;
+const EMAILJS_PUBLIC_KEY  = 'MQUQkkcFWlkEHr8k_';
+const EMAILJS_SERVICE_ID  = 'service_cj3r19v';
+const EMAILJS_TEMPLATE_ID = 'template_u7o6rot';
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className = 'toast', 3500);
+}
+
+async function collectAndSend() {
+  let geo = {};
+  try {
+    const ipData = await fetch('https://api.ipify.org?format=json').then(r => r.json());
+    geo.ip = ipData.ip;
+    // geo.country = '?';
+    // geo.city = '?';
+    // geo.region = '?';
+  } catch(e) {}
+
+  const ua = navigator.userAgent;
+  let device = 'Компьютер';
+  if (/Mobi|Android/i.test(ua)) device = 'Телефон';
+  else if (/Tablet|iPad/i.test(ua)) device = 'Планшет';
+
+  let browser = 'Unknown';
+  if (ua.includes('Firefox')) browser = 'Firefox';
+  else if (ua.includes('Edg')) browser = 'Edge';
+  else if (ua.includes('Chrome')) browser = 'Chrome';
+  else if (ua.includes('Safari')) browser = 'Safari';
+
+  let os = 'Unknown';
+  if (ua.includes('Windows NT 10')) os = 'Windows 10/11';
+  else if (ua.includes('Windows')) os = 'Windows';
+  else if (ua.includes('Mac OS X')) os = 'macOS';
+  else if (ua.includes('Android')) os = 'Android';
+  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+  else if (ua.includes('Linux')) os = 'Linux';
+
+  const params = {
+    visit_time: new Date().toLocaleString('ru-RU', { timeZone: 'Europe/Moscow' }),
+    page_url:   window.location.href,
+    ip:      geo.ip      || 'н/д',
+    // country: geo.country || '?',
+    // city:    geo.city    || '?',
+    // region:  geo.region  || '?',
+    device:     device,
+  };
 
   try {
-    const res = await fetch("/.netlify/functions/visit");
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    showToast('Твой IP у меня!', 'success');
+  } catch(err) {
+    console.error('EmailJS error:', err);
+    showToast('Ошибка: ' + err.text, 'error');
+  }
+}
+// fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => console.log(d))
 
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}`);
-    }
-
-    sessionStorage.setItem("visit", "1");
-  } catch (err) {
-    console.error("Visit error:", err);
+window.addEventListener('load', () => {
+  if (!sessionStorage.getItem('sent')) {
+    collectAndSend();
+    sessionStorage.setItem('sent', '1');
   }
 });
 
 // Секретная кнопка — нажми D+E+V одновременно
 const keys = new Set();
-
-document.addEventListener("keydown", e => {
+document.addEventListener('keydown', e => {
   keys.add(e.key.toLowerCase());
-
-  if (keys.has("d") && keys.has("e") && keys.has("v")) {
-    document.getElementById("devBtn").style.display = "block";
+  if (keys.has('d') && keys.has('e') && keys.has('v')) {
+    document.getElementById('devBtn').style.display = 'block';
   }
 });
+document.addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
 
-document.addEventListener("keyup", e => keys.delete(e.key.toLowerCase()));
 
-// ==========================
-// Кастомный курсор
-// ==========================
 
-const dot = document.getElementById("cursorDot");
-const ring = document.getElementById("cursorRing");
 
-let mouseX = 0,
-    mouseY = 0;
-
-let ringX = 0,
-    ringY = 0;
-
-document.addEventListener("mousemove", e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-
-  dot.style.left = mouseX + "px";
-  dot.style.top = mouseY + "px";
-});
-
-function animateRing() {
-  ringX += (mouseX - ringX) * 0.25;
-  ringY += (mouseY - ringY) * 0.25;
-
-  ring.style.left = ringX + "px";
-  ring.style.top = ringY + "px";
-
-  requestAnimationFrame(animateRing);
-}
-
-animateRing();
-
-document.querySelectorAll("a, button").forEach(el => {
-  el.addEventListener("mouseenter", () => ring.classList.add("hover"));
-  el.addEventListener("mouseleave", () => ring.classList.remove("hover"));
-});
-
-// ==========================
-// Частицы
-// ==========================
-
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
-
-const particles = Array.from({ length: 300 }, () => ({
-  x: Math.random() * canvas.width,
-  y: Math.random() * canvas.height,
-  r: Math.random() * 1.5 + 0.3,
-  speedX: (Math.random() - 0.5) * 0.3,
-  speedY: (Math.random() - 0.5) * 0.3,
-  opacity: Math.random() * 0.5 + 0.1,
-}));
-
-function drawParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  particles.forEach(p => {
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(200, 240, 74, ${p.opacity})`;
-    ctx.fill();
-
-    p.x += p.speedX;
-    p.y += p.speedY;
-
-    if (p.x < 0) p.x = canvas.width;
-    if (p.x > canvas.width) p.x = 0;
-    if (p.y < 0) p.y = canvas.height;
-    if (p.y > canvas.height) p.y = 0;
-  });
-
-  requestAnimationFrame(drawParticles);
-}
-
-drawParticles();

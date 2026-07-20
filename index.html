@@ -7,35 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet"/>
   <link rel="icon" href="./img/ip_icon.png" type="image/x-icon">
   <link rel="stylesheet" href="style.css">
-  
+  <a href="/pages/dev/dev.html" id="devBtn" style="display:none; position:fixed; bottom:1.5rem; right:1.5rem; background:#141414; border:1px solid rgba(200,240,74,0.3); color:#c8f04a; font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; padding:8px 14px; border-radius:20px; text-decoration:none; z-index:999;">dev</a>
 </head>
 <body>
-  <a href="/pages/dev/dev.html" id="devBtn">dev</a>
-  
-  
-  <canvas id="particles"></canvas>
-
-  <div class="cursor-ring" id="cursorRing"></div>
-
-  <svg class="cursor-dot" id="cursorDot" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 2L20 12L12 13.5L8 21L4 2Z"
-      fill="none"
-      stroke="#c8f04a"
-      stroke-width="1.5"
-      stroke-linejoin="round"
-      filter="url(#glow)"
-    />
-    <defs>
-      <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="1.5" result="blur"/>
-        <feMerge>
-          <feMergeNode in="blur"/>
-          <feMergeNode in="blur"/>
-          <feMergeNode in="SourceGraphic"/>
-        </feMerge>
-      </filter>
-    </defs>
-  </svg>
 
   <div class="blob"></div>
 
